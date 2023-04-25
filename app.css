@@ -179,6 +179,102 @@
     width: 100px;
     height: 100px;
   }
+
+  /* Add this new CSS for the forecast section */
+.forecast-section {
+  margin: 70px 0 20px;
+}
+
+.forecast-section .forecast-results {
+  display: grid;
+  grid-gap: 32px 20px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.forecast-section .forecast {
+  position: relative;
+  padding: 40px 10%;
+  border-radius: 20px;
+  background: var(--text_light);
+  color: var(--text_med);
+}
+
+.forecast-section .forecast::after {
+  content: '';
+  width: 90%;
+  height: 50px;
+  position: absolute;
+  bottom: -12px;
+  left: 5%;
+  z-index: -1;
+  opacity: 0.3;
+  border-radius: 20px;
+  background: var(--text_light);
+}
+
+.forecast-section .forecast-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forecast-section .forecast-date {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.forecast-section .forecast-temp {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: var(--text_dark);
+}
+
+.forecast-section .forecast sup {
+  font-size: 0.5em;
+}
+
+.forecast-section figcaption {
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forecast-section .forecast-icon {
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+
+  /* Add this to your existing CSS */
+.weather-container,
+.forecast-container {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.forecast-item {
+  width: calc(20% - 10px);
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
   
   
   /* FOOTER
