@@ -2,7 +2,9 @@ const form = document.querySelector(".top-banner form");
 const input = document.querySelector(".top-banner input");
 const msg = document.querySelector(".top-banner .msg");
 const list = document.querySelector(".ajax-section .cities");
-const apiKey = "218caceb03fd1f38cf5c18d1fdeac6b3";
+const apiKey = "";
+
+let fetchedCities = [];
 
 form.addEventListener("submit", e => {
   e.preventDefault();
@@ -78,14 +80,17 @@ form.addEventListener("submit", e => {
     .then(response => response.json())
     .then(data => {
       const { city, list } = data;
-      const forecastResultsContainer = document.querySelector('.forecast-results');
-      forecastResultsContainer.innerHTML = '';
+      const cityName = `${city.name}, ${city.country}`;
 
+
+    if (!fetchedCities.includes(cityName)) {
+      const forecastResultsContainer = document.querySelector('.forecast-results');
       const forecastDiv = document.createElement("div");
       forecastDiv.classList.add("forecast");
 
       const forecastTitle = document.createElement("h3");
-      forecastTitle.textContent = "5-Day Forecast";
+      forecastTitle.classList.add("city-name");
+      forecastTitle.innerHTML = `<span>${city.name}</span><sup>${city.country}</sup>`;
       forecastDiv.appendChild(forecastTitle);
 
 
@@ -98,6 +103,7 @@ form.addEventListener("submit", e => {
 
           const forecastItem = document.createElement("div");
           forecastItem.classList.add("forecast-item");
+          
 
           const forecastItemMarkup = `
             <div class="forecast-date">${forecastDate.toLocaleDateString()}</div>
@@ -111,12 +117,14 @@ form.addEventListener("submit", e => {
           `;
 
           forecastItem.innerHTML = forecastItemMarkup;
-          forecastDiv.appendChild(forecastItem);
+         forecastDiv.appendChild(forecastItem);
         }
       });
 
-      const cityListItem = document.querySelector(`[data-name="${city.name},${city.country}"]`);
-      cityListItem.parentNode.appendChild(forecastDiv);
+      forecastResultsContainer.appendChild(forecastDiv);
+      fetchedCities.push(cityName);
+    }
+
     })
     .catch(() => {
       msg.textContent = "Please search for a valid city 😩";
