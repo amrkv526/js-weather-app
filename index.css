@@ -152,6 +152,8 @@
     border-radius: 20px;
     background: var(--text_light);
     color: var(--text_med);
+    overflow: auto;
+    box-sizing: border-box;
   }
   
   .ajax-section .city::after {
@@ -181,9 +183,10 @@
   .ajax-section .city-temp {
     font-size: 5rem;
     font-weight: bold;
-    margin-top: 20px;
+    margin: 20px 20px;
     color: var(--text_dark);
     text-align: center;
+    width: auto;
     }
   
   .ajax-section .city sup {
