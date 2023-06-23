@@ -1,140 +1,112 @@
-const form = document.querySelector(".top-banner form");
-const input = document.querySelector(".top-banner input");
-const msg = document.querySelector(".top-banner .msg");
-const list = document.querySelector(".ajax-section .cities");
-const apiKey = "YOUR_API_KEY_HERE";
-
-let fetchedCities = [];
-
-form.addEventListener("submit", e => {
-  e.preventDefault();
-  let inputVal = input.value;
-
-  const listItems = list.querySelectorAll(".ajax-section .city");
-  const listItemsArray = Array.from(listItems);
-
-  if (listItemsArray.length > 0) {
-    const filteredArray = listItemsArray.filter(el => {
-      let content = "";
-
-      if (inputVal.includes(",")) {
-        if (inputVal.split(",")[1].length > 2) {
-          inputVal = inputVal.split(",")[0];
-          content = el
-            .querySelector(".city-name span")
-            .textContent.toLowerCase();
-        } else {
-          content = el.querySelector(".city-name").dataset.name.toLowerCase();
-        }
-      } else {
-        content = el.querySelector(".city-name span").textContent.toLowerCase();
-      }
-      return content == inputVal.toLowerCase();
-    });
-
-    if (filteredArray.length > 0) {
-      msg.textContent = `You already know the weather for ${
-        filteredArray[0].querySelector(".city-name span").textContent
-      } ...otherwise be more specific by providing the country code as well 😉`;
-      form.reset();
-      input.focus();
-      return;
-    }
+function setWeatherBackground(condition) {
+  const body = document.querySelector('body');
+  // Remove the default background class
+  body.classList.remove('default-background');
+  
+  switch (condition) {
+      case 'Clear':
+          body.classList.add('clear-sky');
+          break;
+      case 'Clouds':
+          body.classList.add('cloudy');
+          break;
+      case 'Rain':
+      case 'Mist':
+          body.classList.add('rainy');
+          break;
+      case 'Snow':
+          body.classList.add('snowy');
+          break;
+      case 'Thunderstorm':
+          body.classList.add('thunderstorm');
+          break;
+      default:
+          // Add the default background class if the condition doesn't match any case
+          body.classList.add('default-background');
+          break;
   }
-
-  const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric`;
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${inputVal}&appid=${apiKey}&units=metric`;
-
-  fetch(currentWeatherUrl)
-  .then(response => response.json())
-  .then(data => {
-    const { main, name, sys, weather } = data;
-    const icon = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${
-      weather[0]["icon"]
-    }.svg`;
-
-    const li = document.createElement("li");
-    li.classList.add("city");
-    const markup = `
-      <h2 class="city-name" data-name="${name},${sys.country}">
-        <span>${name}</span>
-        <sup>${sys.country}</sup>
-      </h2>
-      <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
-      <figure>
-        <img class="city-icon" src="${icon}" alt="${
-      weather[0]["description"]
-    }">
-        <figcaption>${weather[0]["description"]}</figcaption>
-      </figure>
-    `;
-      li.innerHTML = markup;
-      document.querySelector(".cities").appendChild(li);
-      
-    })
-    .catch(() => {
-      msg.textContent = "Please search for a valid city 😩";
-    });
-
-  fetch(forecastUrl)
-    .then(response => response.json())
-    .then(data => {
-      const { city, list } = data;
-      const cityName = `${city.name}, ${city.country}`;
+}
 
 
-    if (!fetchedCities.includes(cityName)) {
-      const forecastResultsContainer = document.querySelector('.forecast-results');
-      const forecastDiv = document.createElement("div");
-      forecastDiv.classList.add("forecast");
+document.querySelector(".top-banner form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = e.target.querySelector("input");
+  const msg = e.target.querySelector(".msg");
+  const list = document.querySelector(".ajax-section .cities");
+  const apiKey = "api_key";
+  let inputValue = input.value;
 
-      const forecastTitle = document.createElement("h3");
-      forecastTitle.classList.add("city-name");
-      forecastTitle.innerHTML = `<span>${city.name}</span><sup>${city.country}</sup>`;
-      forecastDiv.appendChild(forecastTitle);
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`;
 
+  fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+          const { main, name, sys, weather } = data;
+          const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@4x.png`;
 
-      list.forEach((forecast, index) => {
-        if (index % 8 === 0) {
-          const forecastDate = new Date(forecast.dt * 1000);
-          const icon = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${
-            forecast.weather[0]["icon"]
-          }.svg`;
-
-          const forecastItem = document.createElement("div");
-          forecastItem.classList.add("forecast-item");
-          
-
-          const forecastItemMarkup = `
-            <div class="forecast-date">${forecastDate.toLocaleDateString()}</div>
-            <div class="forecast-temp">${Math.round(forecast.main.temp)}<sup>°C</sup></div>
-            <figure>
-              <img class="forecast-icon" src="${icon}" alt="${
-            forecast.weather[0]["description"]
-          }">
-              <figcaption>${forecast.weather[0]["description"]}</figcaption>
-            </figure>
+          const li = document.createElement("li");
+          li.classList.add("city");
+          const markup = `
+              <h2 class="city-name" data-name="${name},${sys.country}">
+                  <span>${name}</span>
+                  <sup>${sys.country}</sup>
+              </h2>
+              <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+              <figure>
+                  <img class="city-icon" src="${icon}" alt="${weather[0]["description"]}">
+                  <figcaption>${weather[0]["description"]}</figcaption>
+              </figure>
           `;
+          li.innerHTML = markup;
+          list.appendChild(li);
 
-          forecastItem.innerHTML = forecastItemMarkup;
-         forecastDiv.appendChild(forecastItem);
-        }
+          updateForecast(inputValue, apiKey);
+
+          setWeatherBackground(weather[0].main);
+      })
+      .catch(() => {
+          msg.textContent = "Please search for a valid city 😩";
       });
 
-      forecastResultsContainer.appendChild(forecastDiv);
-      fetchedCities.push(cityName);
-    }
-
-    })
-    .catch(() => {
-      msg.textContent = "Please search for a valid city 😩";
-    });
-
   msg.textContent = "";
-  form.reset();
+  input.value = "";
   input.focus();
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('HTML, CSS, and JavaScript files are connected.');
-});
+function updateForecast(city, apiKey) {
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+  fetch(forecastUrl)
+      .then((response) => response.json())
+      .then((data) => {
+          displayForecast(data);
+      })
+      .catch((error) => {
+          console.error("Error fetching forecast data: ", error);
+      });
+}
+
+function displayForecast(data) {
+  const forecastList = document.querySelector(".forecast-section .forecast-results");
+
+  let filteredData = data.list.filter((item) => {
+      return item.dt_txt.includes("12:00:00");
+  });
+
+  const html = filteredData
+      .map((day) => {
+          return `
+              <li class="forecast">
+                  <h2 class="forecast-date">${new Date(day.dt * 1000).toLocaleDateString()}</h2>
+                  <div class="forecast-temp">${Math.round(day.main.temp)}<sup>°C</sup></div>
+                  <figure>
+                      <img class="forecast-icon" src="https://openweathermap.org/img/wn/${day.weather[0].icon}@4x.png" alt="${day.weather[0].description}">
+                      <figcaption>${day.weather[0].description}</figcaption>
+                  </figure>
+              </li>
+          `;
+      })
+      .join("");
+
+  forecastList.innerHTML = html;
+}
