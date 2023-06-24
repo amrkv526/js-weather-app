@@ -90,7 +90,7 @@ body {
 
 .cloudy {
   background-image: url("/backgrounds/cloudy.jpg");
-  bbackground-size: cover;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   min-height: 100vh;
@@ -288,6 +288,7 @@ background-size: cover;
 .forecast-section {
   margin: 70px 0 20px;
   position: relative;
+  padding-bottom: 80px;
 }
 
 .forecast-section .forecast-results {
@@ -378,6 +379,8 @@ background-size: cover;
   display: flex;
   flex-wrap: wrap;
 }
+
+.forecast-container
 
 .forecast-container .forecast-item {
   height: 220px;
