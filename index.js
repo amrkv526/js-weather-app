@@ -1,40 +1,56 @@
 function setWeatherBackground(condition) {
   const body = document.querySelector('body');
-  // Remove the default background class
-  body.classList.remove('default-background');
+  const backgrounds = ['default-background', 'clear-sky', 'cloudy', 'rainy', 'snowy', 'thunderstorm'];
   
-  switch (condition) {
+  body.classList.remove(...backgrounds);
+
+  setTimeout(() => {
+    switch (condition) {
       case 'Clear':
-          body.classList.add('clear-sky');
-          break;
+        body.classList.add('clear-sky');
+        break;
       case 'Clouds':
-          body.classList.add('cloudy');
-          break;
+        body.classList.add('cloudy');
+        break;
       case 'Rain':
       case 'Mist':
-          body.classList.add('rainy');
-          break;
+        body.classList.add('rainy');
+        break;
       case 'Snow':
-          body.classList.add('snowy');
-          break;
+        body.classList.add('snowy');
+        break;
       case 'Thunderstorm':
-          body.classList.add('thunderstorm');
-          break;
+        body.classList.add('thunderstorm');
+        break;
       default:
-          // Add the default background class if the condition doesn't match any case
-          body.classList.add('default-background');
-          break;
-  }
+        body.classList.add('default-background');
+        break;
+    }
+
+    body.style.animation = 'fade 0.5s';
+    setTimeout(() => {
+      body.style.animation = '';
+    }, 500); 
+  }, 100); 
 }
 
+
+let visitedCities = [];
 
 document.querySelector(".top-banner form").addEventListener("submit", (e) => {
   e.preventDefault();
   const input = e.target.querySelector("input");
   const msg = e.target.querySelector(".msg");
   const list = document.querySelector(".ajax-section .cities");
-  const apiKey = "api_key";
+  const apiKey = "218caceb03fd1f38cf5c18d1fdeac6b3";
   let inputValue = input.value;
+
+  if (visitedCities.includes(inputValue.toLowerCase())) {
+    msg.textContent = "We already know the weather for this location";
+    input.value = "";
+    input.focus();
+    return;
+  }
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`;
 
@@ -59,6 +75,9 @@ document.querySelector(".top-banner form").addEventListener("submit", (e) => {
           `;
           li.innerHTML = markup;
           list.appendChild(li);
+
+          // Add the city to the visited cities
+          visitedCities.push(name.toLowerCase());
 
           updateForecast(inputValue, apiKey);
 
