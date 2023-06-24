@@ -42,7 +42,7 @@ document.querySelector(".top-banner form").addEventListener("submit", (e) => {
   const input = e.target.querySelector("input");
   const msg = e.target.querySelector(".msg");
   const list = document.querySelector(".ajax-section .cities");
-  const apiKey = process.env.apiKey
+  const apiKey = process.env.apiKey;
   let inputValue = input.value;
 
   if (visitedCities.includes(inputValue.toLowerCase())) {
