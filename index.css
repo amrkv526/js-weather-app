@@ -473,3 +473,57 @@ background-size: cover;
 .api a:hover {
   text-decoration: none;
 }
+
+@media screen and (max-width: 768px) {
+  body {
+      padding: 20px;
+  }
+
+  .ajax-section .cities,
+  .forecast-section .forecast-results {
+      grid-template-columns: repeat(2, 1fr);
+  }
+
+  .top-banner form {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .top-banner form input,
+  .top-banner form button {
+      width: 100%;
+  }
+
+  .top-banner form button {
+      margin: 20px 0 0 0;
+  }
+  
+  .top-banner form .msg {
+      position: static;
+      max-width: none;
+      min-height: 0;
+      margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+      padding: 10px;
+  }
+
+  .ajax-section .cities,
+  .forecast-section .forecast-results {
+      grid-template-columns: repeat(1, 1fr);
+  }
+
+  .heading,
+  .ajax-section .city-temp {
+      font-size: 2.5rem;
+  }
+
+  .ajax-section .city,
+  .forecast-section .forecast {
+      padding: 20px 5%;
+  }
+}
+
